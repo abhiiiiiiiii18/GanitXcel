@@ -79,7 +79,7 @@ const CoursePage: React.FC = () => {
     id: id || '1',
     title: 'Complete Algebra Mastery - Grade 10',
     description: 'Master all algebra concepts for Grade 10 with interactive lessons, quizzes, and live doubt sessions. Perfect for CBSE, ICSE, and State Board students.',
-    thumbnail: 'https://via.placeholder.com/1200x600/58CC02/fff?text=Algebra+Masterclass',
+    thumbnail: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1200&h=600&fit=crop&q=80',
     price: 599,
     originalPrice: 999,
     rating: 4.8,
