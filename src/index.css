@@ -1,13 +1,87 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Nunito:wght@300;400;600;700;800;900&display=swap');
+
+@layer base {
+  body {
+    @apply font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer components {
+  /* Duolingo-style button */
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-600 text-white font-bold py-3 px-6 rounded-2xl 
+           shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
+           border-b-4 border-primary-700 active:border-b-0 active:translate-y-1;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary hover:bg-secondary-600 text-white font-bold py-3 px-6 rounded-2xl 
+           shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
+           border-b-4 border-secondary-700 active:border-b-0 active:translate-y-1;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-primary bg-white hover:bg-primary-50 text-primary font-bold 
+           py-3 px-6 rounded-2xl shadow hover:shadow-lg transform hover:scale-105 
+           transition-all duration-200;
+  }
+  
+  /* Card styles */
+  .card {
+    @apply bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300;
+  }
+  
+  /* Streak display */
+  .streak-card {
+    @apply bg-gradient-to-br from-accent-orange to-accent-yellow text-white 
+           rounded-2xl p-6 shadow-lg transform hover:scale-105 transition-all;
+  }
+  
+  /* Progress bar */
+  .progress-bar {
+    @apply h-3 bg-gray-200 rounded-full overflow-hidden;
+  }
+  
+  .progress-fill {
+    @apply h-full bg-gradient-to-r from-primary to-primary-400 rounded-full 
+           transition-all duration-500 ease-out;
+  }
+  
+  /* Input styles */
+  .input-field {
+    @apply w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary 
+           focus:ring-2 focus:ring-primary-200 outline-none transition-all;
+  }
+  
+  /* Sad mode (broken streak) */
+  .sad-mode {
+    @apply grayscale opacity-75;
+  }
+  
+  .sad-mode-bg {
+    @apply bg-sad-100;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
 }

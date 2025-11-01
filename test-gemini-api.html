@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini API Key Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .loading {
+            color: #856404;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔑 Gemini API Key Tester</h1>
+        <p>Test if your Gemini API key is working correctly before using it in the LMS.</p>
+        
+        <div>
+            <label><strong>Enter Your Gemini API Key:</strong></label>
+            <input type="password" id="apiKey" placeholder="AIzaSy..." />
+            <button onclick="testAPIKey()">Test API Key</button>
+            <button onclick="toggleKeyVisibility()" style="background: #6c757d; margin-left: 10px;">Show/Hide Key</button>
+        </div>
+
+        <div id="result"></div>
+
+        <div class="info" style="margin-top: 30px;">
+            <strong>ℹ️ Instructions:</strong><br>
+            1. Get your API key from <a href="https://ai.google.dev/" target="_blank">ai.google.dev</a><br>
+            2. Paste it above and click "Test API Key"<br>
+            3. If successful, copy this key to your <code>.env</code> file<br>
+            4. Format: <code>REACT_APP_GEMINI_API_KEY=your_key_here</code>
+        </div>
+    </div>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from 'https://esm.run/@google/generative-ai';
+
+        window.testAPIKey = async function() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            if (!apiKey) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '❌ Please enter an API key';
+                return;
+            }
+
+            if (!apiKey.startsWith('AIza')) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '⚠️ Warning: API key should start with "AIza". Please check if you copied it correctly.';
+                return;
+            }
+
+            resultDiv.className = 'result loading';
+            resultDiv.innerHTML = '⏳ Testing API key... Please wait...';
+
+            try {
+                console.log('Testing API key:', apiKey.substring(0, 10) + '...');
+                
+                const genAI = new GoogleGenerativeAI(apiKey);
+                const model = genAI.getGenerativeModel({ 
+                    model: 'gemini-2.5-flash',
+                    generationConfig: {
+                        temperature: 0.7,
+                        topK: 40,
+                        topP: 0.95,
+                        maxOutputTokens: 1024,
+                    }
+                });
+
+                console.log('Sending test prompt...');
+                const result = await model.generateContent('What is 2+2? Answer in one sentence.');
+                const response = await result.response;
+                const text = response.text();
+
+                console.log('Response received:', text);
+
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `
+✅ <strong>API Key is Valid!</strong>
+
+<strong>Test Response:</strong>
+${text}
+
+<strong>Next Steps:</strong>
+1. Copy this API key
+2. Open your .env file in the project
+3. Set: REACT_APP_GEMINI_API_KEY=${apiKey}
+4. Restart your dev server (npm start)
+5. Test the chatbot in your LMS!
+
+<strong>API Key (first 20 chars):</strong> ${apiKey.substring(0, 20)}...
+                `;
+            } catch (error) {
+                console.error('Error testing API:', error);
+                
+                let errorMsg = '❌ <strong>API Key Test Failed</strong>\n\n';
+                
+                if (error.message?.includes('API_KEY_INVALID') || error.message?.includes('API key')) {
+                    errorMsg += '<strong>Error:</strong> Invalid API key\n\n';
+                    errorMsg += '<strong>Solution:</strong>\n';
+                    errorMsg += '1. Go to https://ai.google.dev/\n';
+                    errorMsg += '2. Sign in with Google\n';
+                    errorMsg += '3. Click "Get API Key"\n';
+                    errorMsg += '4. Create a new API key\n';
+                    errorMsg += '5. Copy the entire key (starts with AIza)\n';
+                    errorMsg += '6. Try again\n';
+                } else if (error.message?.includes('quota') || error.message?.includes('429')) {
+                    errorMsg += '<strong>Error:</strong> Quota exceeded\n\n';
+                    errorMsg += '<strong>Free Tier Limits:</strong>\n';
+                    errorMsg += '• 60 requests per minute\n';
+                    errorMsg += '• 1,500 requests per day\n\n';
+                    errorMsg += '<strong>Solution:</strong> Wait a few minutes and try again\n';
+                } else if (error.message?.includes('fetch') || error.message?.includes('network')) {
+                    errorMsg += '<strong>Error:</strong> Network error\n\n';
+                    errorMsg += '<strong>Possible Causes:</strong>\n';
+                    errorMsg += '• No internet connection\n';
+                    errorMsg += '• Firewall blocking the request\n';
+                    errorMsg += '• VPN interfering with connection\n';
+                    errorMsg += '• Browser security/CORS policy\n\n';
+                    errorMsg += '<strong>Solution:</strong>\n';
+                    errorMsg += '1. Check your internet connection\n';
+                    errorMsg += '2. Disable VPN temporarily\n';
+                    errorMsg += '3. Try from a different browser\n';
+                    errorMsg += '4. Check firewall settings\n';
+                } else {
+                    errorMsg += '<strong>Error:</strong> ' + error.message + '\n\n';
+                    errorMsg += '<strong>Technical Details:</strong>\n';
+                    errorMsg += JSON.stringify(error, Object.getOwnPropertyNames(error), 2);
+                }
+
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = errorMsg;
+            }
+        };
+
+        window.toggleKeyVisibility = function() {
+            const input = document.getElementById('apiKey');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        };
+    </script>
+</body>
+</html>
