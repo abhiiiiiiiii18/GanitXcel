@@ -201,7 +201,7 @@ const StudentDashboard: React.FC = () => {
     {
       id: '1',
       title: 'Complete Algebra for Grade 10',
-      thumbnail: 'https://via.placeholder.com/400x300/58CC02/fff?text=Algebra',
+      thumbnail: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop&q=80',
       teacher: 'Rajesh Kumar',
       price: 599,
       rating: 4.8,
@@ -211,7 +211,7 @@ const StudentDashboard: React.FC = () => {
     {
       id: '2',
       title: 'Geometry Masterclass',
-      thumbnail: 'https://via.placeholder.com/400x300/1CB0F6/fff?text=Geometry',
+      thumbnail: 'https://images.unsplash.com/photo-1635372722656-389f87a941b7?w=400&h=300&fit=crop&q=80',
       teacher: 'Priya Sharma',
       price: 699,
       rating: 4.9,
@@ -221,7 +221,7 @@ const StudentDashboard: React.FC = () => {
     {
       id: '3',
       title: 'Calculus Made Easy',
-      thumbnail: 'https://via.placeholder.com/400x300/FFC800/fff?text=Calculus',
+      thumbnail: 'https://images.unsplash.com/photo-1596495577886-d920f1fb7238?w=400&h=300&fit=crop&q=80',
       teacher: 'Amit Patel',
       price: 799,
       rating: 4.7,
