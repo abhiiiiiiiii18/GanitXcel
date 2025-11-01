@@ -1,6 +1,6 @@
 import { auth } from '../config/firebase';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://ganitxcel-backend.onrender.com/api';
 
 // Helper function to get Firebase ID token
 const getAuthToken = async () => {
