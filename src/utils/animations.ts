@@ -1,7 +1,16 @@
 import { animate, stagger, Timeline } from 'animejs';
 
-// Create anime function wrapper
-const anime: any = animate;
+// Create safe anime wrapper with proper typing
+const createAnime = (params: any) => {
+  try {
+    return animate(params);
+  } catch (error) {
+    console.warn('Animation failed:', error);
+    return null;
+  }
+};
+
+const anime: any = createAnime;
 anime.stagger = stagger;
 anime.timeline = () => new Timeline();
 anime.random = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -10,42 +19,57 @@ anime.random = (min: number, max: number) => Math.random() * (max - min) + min;
  * Fade in animation
  */
 export const fadeIn = (targets: string | HTMLElement, delay: number = 0) => {
-  return anime({
-    targets,
-    opacity: [0, 1],
-    translateY: [20, 0],
-    duration: 800,
-    delay,
-    easing: 'easeOutCubic',
-  });
+  try {
+    return animate({
+      targets,
+      opacity: [0, 1],
+      translateY: [20, 0],
+      duration: 800,
+      delay,
+      easing: 'easeOutCubic',
+    });
+  } catch (error) {
+    console.warn('fadeIn animation failed:', error);
+    return null;
+  }
 };
 
 /**
  * Slide in from left
  */
 export const slideInLeft = (targets: string | HTMLElement, delay: number = 0) => {
-  return anime({
-    targets,
-    translateX: [-100, 0],
-    opacity: [0, 1],
-    duration: 600,
-    delay,
-    easing: 'easeOutExpo',
-  });
+  try {
+    return animate({
+      targets,
+      translateX: [-100, 0],
+      opacity: [0, 1],
+      duration: 600,
+      delay,
+      easing: 'easeOutExpo',
+    });
+  } catch (error) {
+    console.warn('slideInLeft animation failed:', error);
+    return null;
+  }
 };
 
 /**
  * Slide in from right
  */
 export const slideInRight = (targets: string | HTMLElement, delay: number = 0) => {
-  return anime({
-    targets,
-    translateX: [100, 0],
-    opacity: [0, 1],
-    duration: 600,
-    delay,
-    easing: 'easeOutExpo',
-  });
+  try {
+    return animate({
+      targets,
+      translateX: [100, 0],
+      opacity: [0, 1],
+      duration: 600,
+      delay,
+      easing: 'easeOutExpo',
+    });
+  } catch (error) {
+    console.warn('slideInRight animation failed:', error);
+    return null;
+  }
 };
 
 /**
@@ -108,14 +132,19 @@ export const rotate = (targets: string | HTMLElement) => {
  * Stagger fade in for lists
  */
 export const staggerFadeIn = (targets: string | HTMLElement | NodeListOf<Element> | Element[]) => {
-  return anime({
-    targets,
-    opacity: [0, 1],
-    translateY: [20, 0],
-    delay: anime.stagger(100), // 100ms delay between each item
-    duration: 600,
-    easing: 'easeOutCubic',
-  });
+  try {
+    return animate({
+      targets,
+      opacity: [0, 1],
+      translateY: [20, 0],
+      delay: stagger(100), // 100ms delay between each item
+      duration: 600,
+      easing: 'easeOutCubic',
+    });
+  } catch (error) {
+    console.warn('staggerFadeIn animation failed:', error);
+    return null;
+  }
 };
 
 /**
@@ -184,14 +213,19 @@ export const shake = (targets: string | HTMLElement) => {
  * Floating animation (for hero elements)
  */
 export const float = (targets: string | HTMLElement) => {
-  return anime({
-    targets,
-    translateY: [-10, 10],
-    duration: 2000,
-    direction: 'alternate',
-    loop: true,
-    easing: 'easeInOutSine',
-  });
+  try {
+    return animate({
+      targets,
+      translateY: [-10, 10],
+      duration: 2000,
+      direction: 'alternate',
+      loop: true,
+      easing: 'easeInOutSine',
+    });
+  } catch (error) {
+    console.warn('float animation failed:', error);
+    return null;
+  }
 };
 
 /**
