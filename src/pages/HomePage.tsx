@@ -1,16 +1,36 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '../components/Button';
 import { useAuthStore } from '../store';
+import { slideInLeft, slideInRight, fadeIn, float, staggerFadeIn } from '../utils/animations';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuthStore();
+  const heroTextRef = useRef<HTMLDivElement>(null);
+  const heroImageRef = useRef<HTMLDivElement>(null);
+  const featuresRef = useRef<HTMLDivElement>(null);
 
   // Debug logging
   console.log('🏠 HomePage - Auth State:', { isAuthenticated, user: user?.name, role: user?.role });
 
+  useEffect(() => {
+    // Animate hero section on mount
+    if (heroTextRef.current) {
+      slideInLeft(heroTextRef.current);
+    }
+    if (heroImageRef.current) {
+      slideInRight(heroImageRef.current, 200);
+      float(heroImageRef.current);
+    }
+    // Animate features with stagger
+    setTimeout(() => {
+      if (featuresRef.current) {
+        staggerFadeIn(featuresRef.current.querySelectorAll('.feature-card'));
+      }
+    }, 600);
+  }, []);
   return (
     <div className="min-h-screen">
       {/* Navigation */}
@@ -74,11 +94,7 @@ const HomePage: React.FC = () => {
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <div ref={heroTextRef} style={{ opacity: 0 }}>
             <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">
               Master <span className="text-gradient">Mathematics</span>
               <br />
@@ -106,12 +122,11 @@ const HomePage: React.FC = () => {
                 I'm a Teacher
               </Button>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <div
+            ref={heroImageRef}
+            style={{ opacity: 0 }}
             className="relative"
           >
             <div className="bg-gradient-to-br from-primary to-secondary rounded-3xl p-8 shadow-2xl">
@@ -145,23 +160,20 @@ const HomePage: React.FC = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Features Section */}
       <section className="bg-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.h2
+          <h2
             className="text-4xl font-display font-bold text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
           >
             Why Choose GanitXcel?
-          </motion.h2>
+          </h2>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div ref={featuresRef} className="grid md:grid-cols-3 gap-8">
             {[
               {
                 icon: '🎮',
@@ -194,18 +206,15 @@ const HomePage: React.FC = () => {
                 description: 'Join course-specific communities to connect with peers and learn together.',
               },
             ].map((feature, index) => (
-              <motion.div
+              <div
                 key={index}
-                className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                className="feature-card bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
+                style={{ opacity: 0 }}
               >
                 <div className="text-5xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
