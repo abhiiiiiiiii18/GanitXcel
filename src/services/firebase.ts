@@ -657,7 +657,7 @@ export const getQuizByLessonId = async (lessonId: string) => {
       id: quizDoc.id,
       ...quizDoc.data()
     };
-    console.log('[getQuizByLessonId] Quiz found:', quizData.title);
+    console.log('[getQuizByLessonId] Quiz found:', (quizData as any).title);
     return quizData;
   } catch (error: any) {
     console.error('[getQuizByLessonId] Error fetching quiz:', error);

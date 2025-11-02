@@ -484,7 +484,6 @@ const TeacherDashboard: React.FC = () => {
                           onClick={handleStartLiveClass}
                           disabled={isStartingClass}
                           className="!bg-white !text-red-600 hover:!bg-red-50 font-bold px-8 py-3 text-lg shadow-xl"
-                          style={{ backgroundColor: 'white', color: '#dc2626' }}
                         >
                           {isStartingClass ? '⏳ Starting...' : '🎥 Start Live Class'}
                         </Button>
@@ -492,7 +491,6 @@ const TeacherDashboard: React.FC = () => {
                         <Button
                           onClick={handleEndLiveClass}
                           className="!bg-white !text-red-600 hover:!bg-red-50 font-bold px-8 py-3 text-lg shadow-xl"
-                          style={{ backgroundColor: 'white', color: '#dc2626' }}
                         >
                           🛑 End Class
                         </Button>

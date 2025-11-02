@@ -323,7 +323,6 @@ const StudentDashboard: React.FC = () => {
                 <Button
                   onClick={() => handleJoinLiveClass(liveClass)}
                   className="!bg-white !text-red-600 hover:!bg-red-50 font-bold px-6 py-3 shadow-xl animate-pulse"
-                  style={{ backgroundColor: 'white', color: '#dc2626' }}
                 >
                   🎥 Join Now
                 </Button>
