@@ -101,7 +101,7 @@ export const rotate = (targets: string | HTMLElement) => {
 /**
  * Stagger fade in for lists
  */
-export const staggerFadeIn = (targets: string | HTMLElement) => {
+export const staggerFadeIn = (targets: string | HTMLElement | NodeListOf<Element> | Element[]) => {
   return anime({
     targets,
     opacity: [0, 1],
