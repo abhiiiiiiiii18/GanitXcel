@@ -16,20 +16,41 @@ const HomePage: React.FC = () => {
   console.log('🏠 HomePage - Auth State:', { isAuthenticated, user: user?.name, role: user?.role });
 
   useEffect(() => {
-    // Animate hero section on mount
-    if (heroTextRef.current) {
-      slideInLeft(heroTextRef.current);
-    }
-    if (heroImageRef.current) {
-      slideInRight(heroImageRef.current, 200);
-      float(heroImageRef.current);
-    }
-    // Animate features with stagger
-    setTimeout(() => {
-      if (featuresRef.current) {
-        staggerFadeIn(featuresRef.current.querySelectorAll('.feature-card'));
+    // Animate hero section on mount with error handling
+    try {
+      if (heroTextRef.current) {
+        slideInLeft(heroTextRef.current);
       }
-    }, 600);
+      if (heroImageRef.current) {
+        slideInRight(heroImageRef.current, 200);
+        setTimeout(() => {
+          if (heroImageRef.current) {
+            float(heroImageRef.current);
+          }
+        }, 800);
+      }
+      // Animate features with stagger
+      setTimeout(() => {
+        if (featuresRef.current) {
+          const cards = featuresRef.current.querySelectorAll('.feature-card');
+          if (cards.length > 0) {
+            staggerFadeIn(cards);
+          }
+        }
+      }, 600);
+    } catch (error) {
+      console.warn('Animation initialization failed:', error);
+    }
+    
+    // Fallback: Always ensure elements are visible after timeout
+    setTimeout(() => {
+      if (heroTextRef.current) heroTextRef.current.style.opacity = '1';
+      if (heroImageRef.current) heroImageRef.current.style.opacity = '1';
+      if (featuresRef.current) {
+        const cards = featuresRef.current.querySelectorAll('.feature-card');
+        cards.forEach((card: any) => card.style.opacity = '1');
+      }
+    }, 100);
   }, []);
   return (
     <div className="min-h-screen">
@@ -109,7 +130,7 @@ const HomePage: React.FC = () => {
                 variant="primary"
                 size="lg"
                 icon="🎓"
-                onClick={() => navigate('/register?role=student')}
+                onClick={() => navigate('/login?role=student')}
               >
                 I'm a Student
               </Button>
@@ -117,7 +138,7 @@ const HomePage: React.FC = () => {
                 variant="secondary"
                 size="lg"
                 icon="👨‍🏫"
-                onClick={() => navigate('/register?role=teacher')}
+                onClick={() => navigate('/login?role=teacher')}
               >
                 I'm a Teacher
               </Button>

@@ -128,7 +128,36 @@ const BrowseCourses: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation Bar */}
+      <nav className="bg-white shadow-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/student/dashboard')}>
+              <span className="text-3xl">📐</span>
+              <span className="text-2xl font-display font-bold text-gradient">GanitXcel</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/student/dashboard')}
+                icon="🏠"
+              >
+                Home
+              </Button>
+              <img
+                src={`https://ui-avatars.com/api/?name=${user?.name}`}
+                alt={user?.name}
+                className="w-10 h-10 rounded-full border-2 border-primary cursor-pointer"
+                onClick={() => navigate('/student/dashboard')}
+              />
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div className="p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -250,6 +279,7 @@ const BrowseCourses: React.FC = () => {
             </Button>
           </motion.div>
         )}
+      </div>
       </div>
     </div>
   );

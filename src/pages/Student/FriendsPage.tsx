@@ -22,6 +22,7 @@ const FriendsPage: React.FC = () => {
   const [searchEmail, setSearchEmail] = useState('');
   const [searchResult, setSearchResult] = useState<Friend | null>(null);
   const [isSearching, setIsSearching] = useState(false);
+  const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
 
   // Mock friends list (in production, fetch from Firestore)
   const [friends, setFriends] = useState<Friend[]>([
@@ -360,7 +361,7 @@ const FriendsPage: React.FC = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => navigate(`/student/${friend.id}/profile`)}
+                        onClick={() => setSelectedFriend(friend)}
                         icon="👤"
                       >
                         View Profile
@@ -406,6 +407,100 @@ const FriendsPage: React.FC = () => {
             </div>
           </div>
         </motion.div>
+
+        {/* Friend Profile Modal */}
+        <AnimatePresence>
+          {selectedFriend && (
+            <motion.div
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedFriend(null)}
+            >
+              <motion.div
+                className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex justify-between items-start mb-6">
+                  <h2 className="text-2xl font-bold text-gray-800">Friend Profile</h2>
+                  <button
+                    onClick={() => setSelectedFriend(null)}
+                    className="text-gray-500 hover:text-gray-700 text-2xl"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <div className="flex flex-col items-center text-center mb-6">
+                  <img
+                    src={selectedFriend.avatar}
+                    alt={selectedFriend.name}
+                    className="w-24 h-24 rounded-full border-4 border-primary mb-4"
+                  />
+                  <h3 className="text-2xl font-bold text-gray-800 mb-1">{selectedFriend.name}</h3>
+                  <p className="text-gray-600">{selectedFriend.email}</p>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-r from-orange-100 to-red-100 rounded-xl p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-4xl">🔥</span>
+                      <div>
+                        <p className="text-sm text-gray-600">Current Streak</p>
+                        <p className="text-2xl font-bold text-orange-600">{selectedFriend.streak} days</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-yellow-100 to-amber-100 rounded-xl p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-4xl">⭐</span>
+                      <div>
+                        <p className="text-sm text-gray-600">Total Points</p>
+                        <p className="text-2xl font-bold text-amber-600">{selectedFriend.totalPoints.toLocaleString()}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-green-100 to-emerald-100 rounded-xl p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-4xl">👥</span>
+                      <div>
+                        <p className="text-sm text-gray-600">Status</p>
+                        <p className="text-lg font-bold text-green-600">Friends</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex gap-3">
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => setSelectedFriend(null)}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    variant="primary"
+                    className="flex-1"
+                    onClick={() => {
+                      toast.success('Feature coming soon!');
+                      setSelectedFriend(null);
+                    }}
+                    icon="💬"
+                  >
+                    Message
+                  </Button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

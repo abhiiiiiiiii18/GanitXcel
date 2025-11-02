@@ -234,7 +234,7 @@ const CoursePage: React.FC = () => {
               >
                 {/* Breadcrumb */}
                 <div className="text-sm text-gray-600 mb-4">
-                  <span className="hover:text-primary cursor-pointer" onClick={() => navigate('/')}>Home</span>
+                  <span className="hover:text-primary cursor-pointer" onClick={() => navigate(user?.role === 'STUDENT' ? '/student/dashboard' : '/teacher/dashboard')}>Home</span>
                   <span className="mx-2">/</span>
                   <span className="hover:text-primary cursor-pointer">Courses</span>
                   <span className="mx-2">/</span>
