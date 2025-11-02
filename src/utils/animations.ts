@@ -1,4 +1,10 @@
-import anime from 'animejs/lib/anime.es.js';
+import { animate, stagger, Timeline } from 'animejs';
+
+// Create anime function wrapper
+const anime: any = animate;
+anime.stagger = stagger;
+anime.timeline = () => new Timeline();
+anime.random = (min: number, max: number) => Math.random() * (max - min) + min;
 
 /**
  * Fade in animation
@@ -130,7 +136,7 @@ export const flipCard = (targets: string | HTMLElement) => {
 export const drawCheckmark = (targets: string | HTMLElement) => {
   return anime({
     targets,
-    strokeDashoffset: [anime.setDashoffset, 0],
+    strokeDashoffset: [100, 0],
     duration: 800,
     easing: 'easeInOutQuad',
   });
