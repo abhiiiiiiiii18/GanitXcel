@@ -255,14 +255,16 @@ const HomePage: React.FC = () => {
           <p className="text-xl mb-8 opacity-90">
             Join thousands of students already mastering math with GanitXcel!
           </p>
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => navigate('/register')}
-            className="!bg-white !text-primary !border-white hover:!bg-gray-100"
-          >
-            Start Learning Today! 🚀
-          </Button>
+          <div className="flex justify-center items-center w-full">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => navigate('/register')}
+              className="!bg-white !text-primary !border-white hover:!bg-gray-100 mx-auto"
+            >
+              Start Learning Today! 🚀
+            </Button>
+          </div>
         </div>
       </section>
 
