@@ -17,6 +17,7 @@ import leaderboardRoutes from './routes/leaderboard.js';
 import friendsRoutes from './routes/friends.js';
 import aiRoutes from './routes/ai.js';
 import certificateRoutes from './routes/certificate.js';
+import recommendationsRoutes from './routes/recommendations.js';
 
 // Load environment variables
 dotenv.config();
@@ -69,6 +70,7 @@ app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/friends', friendsRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/certificates', certificateRoutes);
+app.use('/api/recommendations', recommendationsRoutes);
 
 // 404 handler
 app.use((req, res) => {

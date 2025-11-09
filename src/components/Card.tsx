@@ -53,6 +53,7 @@ interface CourseCardProps {
   duration: number;
   onClick: () => void;
   onViewContent?: () => void;
+  badge?: string; // Recommendation reason or special badge
 }
 
 export const CourseCard: React.FC<CourseCardProps> = ({
@@ -65,6 +66,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   duration,
   onClick,
   onViewContent,
+  badge,
 }) => {
   return (
     <motion.div
@@ -83,6 +85,11 @@ export const CourseCard: React.FC<CourseCardProps> = ({
         <div className="absolute top-3 right-3 bg-accent-yellow text-gray-900 px-3 py-1 rounded-full font-bold text-sm shadow-lg">
           ₹{price}
         </div>
+        {badge && (
+          <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold">
+            {badge}
+          </div>
+        )}
       </div>
       
       <div className="p-5">

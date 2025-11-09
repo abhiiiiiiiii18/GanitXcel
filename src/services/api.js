@@ -219,4 +219,13 @@ export const certificateAPI = {
   verify: (certificateId) => api.publicGet(`/certificates/verify/${certificateId}`)
 };
 
+export const recommendationsAPI = {
+  getPersonalized: (limit = 10) => 
+    api.get(`/recommendations?limit=${limit}`),
+  getByTopic: (topic, limit = 5) => 
+    api.get(`/recommendations/topic/${topic}?limit=${limit}`),
+  getTrending: (limit = 6) => 
+    api.get(`/recommendations/trending?limit=${limit}`)
+};
+
 export default api;

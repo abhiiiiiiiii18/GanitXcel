@@ -11,6 +11,7 @@ import { ProgressBar } from '../../components/ProgressBar';
 import { NotificationPanel } from '../../components/NotificationPanel';
 import { ProfileEditModal } from '../../components/ProfileEditModal';
 import { CourseContentModal } from '../../components/CourseContentModal';
+import { RecommendedCourses } from '../../components/RecommendedCourses';
 import { getStreakStatus, formatDuration, getPointsBadge } from '../../utils/helpers';
 import { joinLiveClass } from '../../services/firebase';
 import toast from 'react-hot-toast';
@@ -474,6 +475,14 @@ const StudentDashboard: React.FC = () => {
                 </div>
               </div>
             )}
+
+            {/* Personalized Recommendations */}
+            <div className="mb-8">
+              <RecommendedCourses
+                onCourseClick={(courseId) => navigate(`/course/${courseId}`)}
+                limit={6}
+              />
+            </div>
 
             {/* Popular Courses */}
             <div>
