@@ -12,7 +12,7 @@ import StudentDashboard from './pages/Student/Dashboard';
 import BrowseCourses from './pages/Student/BrowseCourses';
 import LeaderboardPage from './pages/Student/LeaderboardPage';
 import FriendsPage from './pages/Student/FriendsPage';
-import TeacherDashboard from './pages/Teacher/Dashboard';
+import TeacherDashboard from './pages/Teacher/DashboardProfessional';
 import CoursePage from './pages/CoursePage';
 import LessonPage from './pages/LessonPage';
 import QuizPage from './pages/QuizPage';
