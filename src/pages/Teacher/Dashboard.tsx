@@ -1,49 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart
 } from 'recharts';
 import { useAuthStore } from '../../store';
+import { Button } from '../../components/Button';
 import toast from 'react-hot-toast';
 
-// Material-UI style components (custom implementation to avoid dependency issues)
+// Professional Card Component matching site theme
 const Card = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`bg-white rounded-xl shadow-lg p-6 ${className}`}>
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className={`bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow ${className}`}
+  >
     {children}
-  </div>
+  </motion.div>
 );
 
-const StatCard = ({ icon, title, value, change, color }: {
+// Stats Card with Duolingo-style design
+const StatCard = ({ icon, title, value, change, gradient }: {
   icon: string;
   title: string;
   value: string | number;
   change?: string;
-  color: string;
+  gradient: string;
 }) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    whileHover={{ y: -5 }}
-    className="bg-white rounded-xl shadow-lg p-6 border-l-4"
-    style={{ borderLeftColor: color }}
+    initial={{ opacity: 0, scale: 0.9 }}
+    animate={{ opacity: 1, scale: 1 }}
+    whileHover={{ y: -8, scale: 1.02 }}
+    className={`bg-gradient-to-br ${gradient} rounded-2xl shadow-lg p-6 text-white cursor-pointer transform transition-all duration-300 border-b-4 border-opacity-50`}
   >
-    <div className="flex items-center justify-between mb-4">
-      <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl`}
-           style={{ backgroundColor: `${color}20` }}>
-        {icon}
-      </div>
+    <div className="flex items-center justify-between mb-3">
+      <div className="text-4xl">{icon}</div>
       {change && (
-        <span className={`text-sm font-semibold px-3 py-1 rounded-full ${
-          change.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-        }`}>
+        <motion.span 
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          className="bg-white bg-opacity-20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1"
+        >
+          {change.startsWith('+') ? '📈' : '📉'}
           {change}
-        </span>
+        </motion.span>
       )}
     </div>
-    <h3 className="text-gray-600 text-sm font-medium mb-1">{title}</h3>
-    <p className="text-3xl font-bold" style={{ color }}>{value}</p>
+    <h3 className="text-white text-opacity-90 text-sm font-semibold mb-2 uppercase tracking-wide">{title}</h3>
+    <p className="text-4xl font-black">{value}</p>
   </motion.div>
 );
 
@@ -93,11 +98,11 @@ const TeacherDashboardProfessional: React.FC = () => {
   ];
 
   const topicDistribution = [
-    { name: 'Algebra', value: 342, color: '#8b5cf6' },
-    { name: 'Calculus', value: 287, color: '#3b82f6' },
-    { name: 'Geometry', value: 256, color: '#10b981' },
-    { name: 'Trigonometry', value: 198, color: '#f59e0b' },
-    { name: 'Statistics', value: 164, color: '#ef4444' },
+    { name: 'Algebra', value: 342, color: '#58CC02' },    // Primary green
+    { name: 'Calculus', value: 287, color: '#1CB0F6' },   // Secondary blue
+    { name: 'Geometry', value: 256, color: '#CE82FF' },   // Accent purple
+    { name: 'Trigonometry', value: 198, color: '#FFC800' }, // Accent yellow
+    { name: 'Statistics', value: 164, color: '#FF9600' },  // Accent orange
   ];
 
   const recentActivities = [
@@ -117,20 +122,22 @@ const TeacherDashboardProfessional: React.FC = () => {
   const COLORS = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation */}
-      <nav className="bg-white shadow-sm sticky top-0 z-50 border-b">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+      {/* Top Navigation - Matching site theme */}
+      <nav className="bg-white shadow-sm sticky top-0 z-50 border-b-2 border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/teacher/dashboard')}>
               <span className="text-3xl">📐</span>
               <div>
-                <span className="text-2xl font-display font-bold text-gradient">GanitXcel</span>
-                <p className="text-xs text-gray-500">Teacher Portal</p>
+                <span className="text-2xl font-display font-bold text-gradient bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  GanitXcel
+                </span>
+                <p className="text-xs text-gray-500 font-semibold">Teacher Dashboard</p>
               </div>
             </div>
             
-            {/* Tab Navigation */}
+            {/* Tab Navigation with Duolingo style */}
             <div className="flex items-center gap-2">
               {[
                 { id: 'overview', label: 'Overview', icon: '📊' },
@@ -138,38 +145,51 @@ const TeacherDashboardProfessional: React.FC = () => {
                 { id: 'students', label: 'Students', icon: '👥' },
                 { id: 'analytics', label: 'Analytics', icon: '📈' },
               ].map((tab) => (
-                <button
+                <motion.button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2 ${
                     activeTab === tab.id
-                      ? 'bg-primary text-white shadow-lg'
+                      ? 'bg-primary text-white shadow-lg border-b-4 border-primary-700'
                       : 'text-gray-600 hover:bg-gray-100'
                   }`}
                 >
                   <span>{tab.icon}</span>
                   <span className="hidden md:inline">{tab.label}</span>
-                </button>
+                </motion.button>
               ))}
             </div>
 
             <div className="flex items-center gap-4">
-              <button className="relative p-2 hover:bg-gray-100 rounded-lg transition">
+              <motion.button 
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="relative p-2 hover:bg-gray-100 rounded-xl transition"
+              >
                 <span className="text-2xl">🔔</span>
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
+                <motion.span 
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                  className="absolute top-1 right-1 w-2.5 h-2.5 bg-accent-red rounded-full"
+                ></motion.span>
+              </motion.button>
               <div className="flex items-center gap-3">
-                <img
-                  src={`https://ui-avatars.com/api/?name=${user?.name}&background=8b5cf6&color=fff`}
+                <motion.img
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  src={`https://ui-avatars.com/api/?name=${user?.name}&background=58CC02&color=fff&bold=true`}
                   alt={user?.name}
-                  className="w-10 h-10 rounded-full border-2 border-primary cursor-pointer"
+                  className="w-10 h-10 rounded-full border-3 border-primary shadow-lg cursor-pointer"
                 />
-                <button
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={handleLogout}
-                  className="hidden md:block px-4 py-2 text-sm font-medium text-gray-700 hover:text-red-600 transition"
+                  className="hidden md:block"
                 >
                   Logout
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -177,47 +197,51 @@ const TeacherDashboardProfessional: React.FC = () => {
       </nav>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Welcome Header */}
+        {/* Welcome Header with fun animation */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-4xl font-bold mb-2">
+          <motion.h1 
+            className="text-5xl font-display font-black mb-3 bg-gradient-to-r from-primary via-secondary to-accent-purple bg-clip-text text-transparent"
+            animate={{ backgroundPosition: ['0%', '100%', '0%'] }}
+            transition={{ duration: 5, repeat: Infinity }}
+          >
             Welcome back, {user?.name}! 👋
-          </h1>
-          <p className="text-gray-600">Here's what's happening with your courses today.</p>
+          </motion.h1>
+          <p className="text-gray-600 text-lg font-medium">Here's what's happening with your courses today.</p>
         </motion.div>
 
-        {/* Stats Grid */}
+        {/* Stats Grid - Duolingo style */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard
             icon="💰"
             title="Total Revenue"
             value={`₹${(stats.totalRevenue / 1000).toFixed(1)}K`}
             change={stats.monthlyGrowth}
-            color="#10b981"
+            gradient="from-green-400 to-green-600"
           />
           <StatCard
             icon="👥"
             title="Total Students"
             value={stats.totalStudents.toLocaleString()}
             change={stats.studentGrowth}
-            color="#3b82f6"
+            gradient="from-blue-400 to-blue-600"
           />
           <StatCard
             icon="📚"
             title="Active Courses"
             value={stats.activeCourses}
             change={stats.courseGrowth}
-            color="#8b5cf6"
+            gradient="from-purple-400 to-purple-600"
           />
           <StatCard
             icon="⭐"
             title="Average Rating"
             value={stats.avgRating.toFixed(1)}
             change={stats.ratingChange}
-            color="#f59e0b"
+            gradient="from-yellow-400 to-orange-500"
           />
         </div>
 
@@ -228,13 +252,13 @@ const TeacherDashboardProfessional: React.FC = () => {
             <Card className="lg:col-span-2">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-xl font-bold">Revenue & Student Growth</h2>
+                  <h2 className="text-2xl font-display font-bold text-gray-800 mb-1">Revenue & Student Growth</h2>
                   <p className="text-sm text-gray-600">Last 6 months performance</p>
                 </div>
                 <select
                   value={timeRange}
                   onChange={(e) => setTimeRange(e.target.value as any)}
-                  className="px-4 py-2 border rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="px-4 py-2 border-2 border-gray-200 rounded-xl text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                 >
                   <option value="week">Last Week</option>
                   <option value="month">Last Month</option>
@@ -245,79 +269,115 @@ const TeacherDashboardProfessional: React.FC = () => {
                 <AreaChart data={revenueData}>
                   <defs>
                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#58CC02" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#58CC02" stopOpacity={0.1}/>
                     </linearGradient>
                     <linearGradient id="colorStudents" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#1CB0F6" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#1CB0F6" stopOpacity={0.1}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis dataKey="month" stroke="#6b7280" />
-                  <YAxis stroke="#6b7280" />
+                  <XAxis dataKey="month" stroke="#6b7280" style={{ fontWeight: 600 }} />
+                  <YAxis stroke="#6b7280" style={{ fontWeight: 600 }} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                    contentStyle={{ 
+                      backgroundColor: '#fff', 
+                      border: '2px solid #e5e7eb', 
+                      borderRadius: '12px',
+                      fontWeight: 600
+                    }}
                   />
-                  <Legend />
-                  <Area type="monotone" dataKey="revenue" stroke="#10b981" fillOpacity={1} fill="url(#colorRevenue)" name="Revenue (₹)" />
-                  <Area type="monotone" dataKey="students" stroke="#3b82f6" fillOpacity={1} fill="url(#colorStudents)" name="Students" />
+                  <Legend wrapperStyle={{ fontWeight: 600 }} />
+                  <Area 
+                    type="monotone" 
+                    dataKey="revenue" 
+                    stroke="#58CC02" 
+                    strokeWidth={3}
+                    fillOpacity={1} 
+                    fill="url(#colorRevenue)" 
+                    name="Revenue (₹)" 
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="students" 
+                    stroke="#1CB0F6" 
+                    strokeWidth={3}
+                    fillOpacity={1} 
+                    fill="url(#colorStudents)" 
+                    name="Students" 
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </Card>
 
             {/* Recent Activities */}
             <Card>
-              <h2 className="text-xl font-bold mb-4">Recent Activities</h2>
-              <div className="space-y-4 max-h-[300px] overflow-y-auto">
-                {recentActivities.map((activity, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                    className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg transition"
-                  >
-                    <div className="text-2xl">{activity.icon}</div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">
-                        {activity.student}
-                        {activity.type === 'enrollment' && ` enrolled in ${activity.course}`}
-                        {activity.type === 'quiz' && ` scored ${activity.score}% in ${activity.course}`}
-                        {activity.type === 'feedback' && ` rated you ${activity.rating}⭐`}
-                        {activity.type === 'doubt' && ` asked: ${activity.question}`}
-                        {activity.type === 'completion' && ` completed ${activity.course}`}
-                      </p>
-                      <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
-                    </div>
-                  </motion.div>
-                ))}
+              <h2 className="text-2xl font-display font-bold text-gray-800 mb-4">Recent Activities</h2>
+              <div className="space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar">
+                <AnimatePresence>
+                  {recentActivities.map((activity, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ delay: idx * 0.1 }}
+                      whileHover={{ scale: 1.02, x: 5 }}
+                      className="flex items-start gap-3 p-3 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 rounded-xl transition cursor-pointer border-l-4 border-transparent hover:border-primary"
+                    >
+                      <motion.div 
+                        whileHover={{ rotate: 360 }}
+                        transition={{ duration: 0.5 }}
+                        className="text-3xl"
+                      >
+                        {activity.icon}
+                      </motion.div>
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-gray-900">
+                          {activity.student}
+                          {activity.type === 'enrollment' && ` enrolled in ${activity.course}`}
+                          {activity.type === 'quiz' && ` scored ${activity.score}% in ${activity.course}`}
+                          {activity.type === 'feedback' && ` rated you ${activity.rating}⭐`}
+                          {activity.type === 'doubt' && ` asked: ${activity.question}`}
+                          {activity.type === 'completion' && ` completed ${activity.course}`}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1 font-semibold">{activity.time}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
               </div>
             </Card>
 
             {/* Student Engagement */}
             <Card className="lg:col-span-2">
-              <h2 className="text-xl font-bold mb-4">Student Engagement (This Week)</h2>
+              <h2 className="text-2xl font-display font-bold text-gray-800 mb-4">Student Engagement (This Week)</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={studentEngagement}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis dataKey="day" stroke="#6b7280" />
-                  <YAxis stroke="#6b7280" />
+                  <XAxis dataKey="day" stroke="#6b7280" style={{ fontWeight: 600 }} />
+                  <YAxis stroke="#6b7280" style={{ fontWeight: 600 }} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                    contentStyle={{ 
+                      backgroundColor: '#fff', 
+                      border: '2px solid #e5e7eb', 
+                      borderRadius: '12px',
+                      fontWeight: 600
+                    }}
                   />
-                  <Legend />
-                  <Bar dataKey="active" fill="#8b5cf6" name="Active Students" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="quizzes" fill="#3b82f6" name="Quizzes Taken" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="lessons" fill="#10b981" name="Lessons Watched" radius={[8, 8, 0, 0]} />
+                  <Legend wrapperStyle={{ fontWeight: 600 }} />
+                  <Bar dataKey="active" fill="#CE82FF" name="Active Students" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="quizzes" fill="#1CB0F6" name="Quizzes Taken" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="lessons" fill="#58CC02" name="Lessons Watched" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </Card>
 
             {/* Topic Distribution */}
             <Card>
-              <h2 className="text-xl font-bold mb-4">Course Distribution</h2>
-              <ResponsiveContainer width="100%" height={300}>
+              <h2 className="text-2xl font-display font-bold text-gray-800 mb-4">Course Distribution</h2>
+              <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie
                     data={topicDistribution}
@@ -325,26 +385,37 @@ const TeacherDashboardProfessional: React.FC = () => {
                     cy="50%"
                     labelLine={false}
                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
+                    outerRadius={85}
                     fill="#8884d8"
                     dataKey="value"
+                    style={{ fontWeight: 'bold', fontSize: '12px' }}
                   >
                     {topicDistribution.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip contentStyle={{ borderRadius: '12px', fontWeight: 600 }} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="mt-4 space-y-2">
                 {topicDistribution.map((topic, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-sm">
+                  <motion.div 
+                    key={idx} 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="flex items-center justify-between text-sm p-2 hover:bg-gray-50 rounded-lg transition"
+                  >
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: topic.color }}></div>
-                      <span>{topic.name}</span>
+                      <motion.div 
+                        whileHover={{ scale: 1.3 }}
+                        className="w-4 h-4 rounded-full shadow-sm" 
+                        style={{ backgroundColor: topic.color }}
+                      ></motion.div>
+                      <span className="font-semibold text-gray-700">{topic.name}</span>
                     </div>
-                    <span className="font-semibold">{topic.value} students</span>
-                  </div>
+                    <span className="font-black text-gray-900">{topic.value} students</span>
+                  </motion.div>
                 ))}
               </div>
             </Card>
@@ -356,24 +427,24 @@ const TeacherDashboardProfessional: React.FC = () => {
           <Card>
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-bold">Course Performance</h2>
-                <p className="text-gray-600">Detailed analytics for all your courses</p>
+                <h2 className="text-3xl font-display font-black text-gray-900">Course Performance</h2>
+                <p className="text-gray-600 font-semibold">Detailed analytics for all your courses</p>
               </div>
-              <button className="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-600 transition flex items-center gap-2">
+              <Button variant="primary" className="flex items-center gap-2">
                 <span>➕</span>
                 Create New Course
-              </button>
+              </Button>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b-2 border-gray-200">
-                    <th className="text-left py-4 px-4 font-semibold text-gray-700">Course Name</th>
-                    <th className="text-center py-4 px-4 font-semibold text-gray-700">Students</th>
-                    <th className="text-center py-4 px-4 font-semibold text-gray-700">Revenue</th>
-                    <th className="text-center py-4 px-4 font-semibold text-gray-700">Rating</th>
-                    <th className="text-center py-4 px-4 font-semibold text-gray-700">Completion</th>
-                    <th className="text-center py-4 px-4 font-semibold text-gray-700">Actions</th>
+                  <tr className="border-b-2 border-gray-200 bg-gray-50">
+                    <th className="text-left py-4 px-4 font-black text-gray-800">Course Name</th>
+                    <th className="text-center py-4 px-4 font-black text-gray-800">Students</th>
+                    <th className="text-center py-4 px-4 font-black text-gray-800">Revenue</th>
+                    <th className="text-center py-4 px-4 font-black text-gray-800">Rating</th>
+                    <th className="text-center py-4 px-4 font-black text-gray-800">Completion</th>
+                    <th className="text-center py-4 px-4 font-black text-gray-800">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -383,44 +454,57 @@ const TeacherDashboardProfessional: React.FC = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.1 }}
-                      className="border-b border-gray-100 hover:bg-gray-50 transition"
+                      whileHover={{ backgroundColor: '#f9fafb', scale: 1.01 }}
+                      className="border-b border-gray-100 transition"
                     >
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center text-white font-bold">
+                          <motion.div 
+                            whileHover={{ rotate: 360, scale: 1.2 }}
+                            transition={{ duration: 0.5 }}
+                            className="w-14 h-14 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg"
+                          >
                             {course.name[0]}
-                          </div>
+                          </motion.div>
                           <div>
-                            <p className="font-semibold">{course.name}</p>
-                            <p className="text-sm text-gray-500">Active</p>
+                            <p className="font-bold text-gray-900">{course.name}</p>
+                            <p className="text-sm text-primary font-semibold">Active</p>
                           </div>
                         </div>
                       </td>
                       <td className="text-center py-4 px-4">
-                        <span className="font-semibold text-lg">{course.students}</span>
+                        <span className="font-black text-2xl text-gray-900">{course.students}</span>
                       </td>
                       <td className="text-center py-4 px-4">
-                        <span className="font-semibold text-green-600">₹{(course.revenue / 1000).toFixed(1)}K</span>
+                        <span className="font-black text-xl text-primary">₹{(course.revenue / 1000).toFixed(1)}K</span>
                       </td>
                       <td className="text-center py-4 px-4">
                         <div className="flex items-center justify-center gap-1">
-                          <span>⭐</span>
-                          <span className="font-semibold">{course.rating}</span>
+                          <span className="text-2xl">⭐</span>
+                          <span className="font-black text-xl text-accent-yellow">{course.rating}</span>
                         </div>
                       </td>
                       <td className="text-center py-4 px-4">
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-primary h-2 rounded-full transition-all"
-                            style={{ width: `${course.completion}%` }}
-                          ></div>
+                        <div className="w-full px-4">
+                          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${course.completion}%` }}
+                              transition={{ duration: 1, delay: idx * 0.1 }}
+                              className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full"
+                            ></motion.div>
+                          </div>
+                          <span className="text-sm font-bold text-gray-700 mt-1 block">{course.completion}%</span>
                         </div>
-                        <span className="text-xs text-gray-600 mt-1">{course.completion}%</span>
                       </td>
                       <td className="text-center py-4 px-4">
-                        <button className="px-4 py-2 text-primary hover:bg-primary-50 rounded-lg font-medium transition">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="font-bold"
+                        >
                           View Details
-                        </button>
+                        </Button>
                       </td>
                     </motion.tr>
                   ))}
