@@ -1,128 +1,152 @@
-# 📐 GanitXcel - Mathematics LMS# Getting Started with Create React App
+# ��� GanitXcel - Mathematics Learning Platform
 
+**A Personal Project: Duolingo-inspired Mathematics LMS for Indian Students (Grades 8-12)**
 
-
-**A Duolingo-inspired mathematics learning platform for Indian students (Grades 8-12)**This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-
-
-## 🎯 Features## Available Scripts
-
-
-
-### Students 🎓In the project directory, you can run:
-
-- Duolingo-style gamification (streaks, points, badges)
-
-- AI doubt bot + post-quiz tutor### `npm start`
-
-- YouTube-based curated lessons
-
-- Live doubt classes (weekly)Runs the app in the development mode.\
-
-- Certificates & cash scholarships (₹500-₹1000)Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-- Discord communities
-
-- Broken streak UI motivationThe page will reload if you make edits.\
-
-You will also see any lint errors in the console.
-
-### Teachers 👩‍🏫
-
-- Course creation (YouTube playlists + quizzes)### `npm test`
-
-- Qualification test (tab-switching detection)
-
-- Dashboard with earnings tracking (30% platform commission)Launches the test runner in the interactive watch mode.\
-
-- Student analyticsSee the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-
-
-## 🛠️ Tech Stack### `npm run build`
-
-
-
-**Frontend:** React 18, TypeScript, Tailwind CSS, Framer Motion  Builds the app for production to the `build` folder.\
-
-**Backend:** Firebase (Auth, Firestore, Storage)  It correctly bundles React in production mode and optimizes the build for the best performance.
-
-**State:** Zustand  
-
-**Routing:** React Router  The build is minified and the filenames include the hashes.\
-
-**AI:** OpenAI API  Your app is ready to be deployed!
-
-**Video:** YouTube IFrame API
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-## 🚀 Quick Start
-
-### `npm run eject`
-
-```bash
-
-# Install dependencies**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-npm install
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-# Setup environment
-
-cp .env.example .envInstead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-# Edit .env with your Firebase & OpenAI credentials
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-# Start development server
-
-npm start## Learn More
-
-```
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-Open [http://localhost:3000](http://localhost:3000)
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-## 📁 Structure
-
-```
-src/
-├── components/    # UI components (Button, Card, StreakDisplay)
-├── pages/         # Routes (Home, Dashboard, Course, etc.)
-├── hooks/         # Custom hooks (tab detection)
-├── store/         # Zustand stores
-├── utils/         # Helpers
-├── types/         # TypeScript types
-├── config/        # Firebase & constants
-└── services/      # API services
-```
-
-## 🎨 Design
-
-**Duolingo-Inspired:**
-- Colors: Green (#58CC02), Blue (#1CB0F6), Yellow (#FFC800)
-- Animations & gamification
-- Broken streak mode (grayscale UI)
-
-## 💰 Monetization
-
-- Courses: ₹499-₹999
-- Platform fee: 30%
-- Top ranker rewards: ₹500-₹1000
-
-## 🔒 Security
-
-- Tab-switching detection (zero tolerance)
-- Academic integrity enforcement
-- Teacher vetting
+> This is a personal project built to create an engaging, gamified mathematics learning experience for students preparing for board exams and competitive tests.
 
 ---
 
-**Built for Hackathon | Made with ❤️**
+## ���‍��� About This Project
+
+GanitXcel is my personal learning management system that combines the best of gamification (inspired by Duolingo) with quality mathematics education. The platform helps students learn through:
+
+- Interactive lessons using curated YouTube content
+- Gamified progress tracking with streaks and rewards
+- AI-powered doubt resolution
+- Live classes with qualified teachers
+- Comprehensive quizzes and assessments
+
+## ��� Key Features
+
+### For Students ���
+- **Gamified Learning**: Earn points, maintain streaks, collect badges
+- **AI Tutor**: 24/7 doubt bot powered by Gemini AI
+- **Video Lessons**: Curated YouTube content organized by curriculum
+- **Live Doubt Sessions**: Weekly classes with teachers
+- **Rewards**: Certificates and scholarships for top performers
+- **Community**: Discord channels for peer learning
+- **Progress Tracking**: Visual analytics and achievement system
+
+### For Teachers ���‍���
+- **Course Creation**: Build courses using YouTube playlists
+- **Quiz Management**: Create and manage assessments
+- **Qualification System**: Verified teaching credentials
+- **Analytics Dashboard**: Track student performance
+- **Earnings Portal**: Manage course revenue (70% share)
+
+## ���️ Tech Stack
+
+**Frontend**: React 18 + TypeScript + Tailwind CSS + Framer Motion  
+**Backend**: Firebase (Auth, Firestore, Storage)  
+**State Management**: Zustand  
+**Routing**: React Router v6  
+**AI**: Google Gemini API  
+**Video**: YouTube IFrame API  
+**Charts**: Recharts  
+
+## �� Getting Started
+
+### Prerequisites
+- Node.js 18+
+- Firebase account
+- Google Gemini API key
+
+### Installation
+
+\`\`\`bash
+# Clone the repository
+git clone https://github.com/abhiiiiiiiii18/GanitXcel.git
+cd GanitXcel
+
+# Install dependencies
+npm install
+
+# Install server dependencies
+cd server
+npm install
+cd ..
+
+# Setup environment variables
+cp .env.example .env
+# Edit .env with your Firebase & Gemini API credentials
+
+# Start backend server
+cd server
+npm start
+
+# Start frontend (in another terminal)
+cd ..
+npm start
+\`\`\`
+
+Open [http://localhost:3000](http://localhost:3000) to view the app.
+
+## ��� Docker Support
+
+Build and run with Docker Compose:
+
+\`\`\`bash
+# Build images
+docker-compose build
+
+# Start services
+docker-compose up -d
+
+# Access the app at http://localhost:3000
+\`\`\`
+
+## ��� Project Structure
+
+\`\`\`
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── pages/          # Route pages
+│   ├── hooks/          # Custom React hooks
+│   ├── store/          # Zustand state management
+│   ├── utils/          # Helper functions
+│   ├── types/          # TypeScript definitions
+│   ├── config/         # Firebase configuration
+│   └── services/       # API services
+├── server/             # Backend Node.js server
+│   ├── routes/         # API routes
+│   ├── middleware/     # Auth middleware
+│   └── config/         # Server configuration
+└── public/             # Static assets
+\`\`\`
+
+## ��� Design Philosophy
+
+**Duolingo-Inspired UI:**
+- Primary colors: Green (#58CC02), Blue (#1CB0F6), Yellow (#FFC800)
+- Smooth animations and transitions
+- Gamification elements throughout
+- Motivational broken streak mode
+
+## �� Business Model
+
+- **Course Pricing**: ₹499-₹999 per course
+- **Revenue Share**: Teachers get 70%, platform takes 30%
+- **Student Rewards**: Top rankers receive ₹500-₹1000 scholarships
+- **Freemium Model**: Basic content free, premium courses paid
+
+## ��� Security Features
+
+- Firebase Authentication
+- Tab-switching detection for academic integrity
+- Teacher qualification verification
+- Secure payment integration (Razorpay)
+
+## ��� License
+
+This is a personal project. All rights reserved.
+
+## ��� Author
+
+**Abhi**  
+GitHub: [@abhiiiiiiiii18](https://github.com/abhiiiiiiiii18)
+
+---
+
+**Note**: This project was built as a personal learning experience and portfolio piece. Feel free to explore the code and learn from it!
+
+��� *Made with passion for mathematics education* ❤️
