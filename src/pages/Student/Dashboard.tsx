@@ -253,10 +253,10 @@ const StudentDashboard: React.FC = () => {
   const streakStatus = getStreakStatus(lastActiveDate);
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-screen pb-20 bg-gray-50 w-full m-0 p-0">
       {/* Header */}
-      <nav className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="bg-white shadow-sm sticky top-0 z-50 w-full">
+        <div className="px-4 md:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div 
               className="flex items-center gap-2 cursor-pointer"
@@ -303,7 +303,7 @@ const StudentDashboard: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-gradient-to-r from-red-500 to-pink-500 shadow-lg"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="px-4 md:px-6 lg:px-8 py-4">
             {liveClasses.map((liveClass) => (
               <div key={liveClass.id} className="flex items-center justify-between text-white">
                 <div className="flex items-center gap-4">
@@ -333,7 +333,7 @@ const StudentDashboard: React.FC = () => {
         </motion.div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="px-4 md:px-6 lg:px-8 py-8 w-full">
         {/* Welcome Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -375,11 +375,11 @@ const StudentDashboard: React.FC = () => {
           </motion.div>
         )}
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid xl:grid-cols-3 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="xl:col-span-2 space-y-8">
             {/* Stats Overview */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <motion.div
                 className="bg-white rounded-xl shadow p-4"
                 whileHover={{ scale: 1.05 }}
@@ -450,7 +450,7 @@ const StudentDashboard: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {purchasedCourses.map((course) => (
                     <CourseCard
                       key={course.id}
@@ -493,7 +493,7 @@ const StudentDashboard: React.FC = () => {
                 </Button>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {popularCourses.map((course) => (
                   <CourseCard
                     key={course.id}

@@ -1,29 +1,44 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { useAuthStore, useUIStore } from './store';
 
-// Pages (will be created)
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import StudentDashboard from './pages/Student/Dashboard';
-import BrowseCourses from './pages/Student/BrowseCourses';
-import LeaderboardPage from './pages/Student/LeaderboardPage';
-import FriendsPage from './pages/Student/FriendsPage';
-import TeacherDashboard from './pages/Teacher/Dashboard';
-import CoursePage from './pages/CoursePage';
-import LessonPage from './pages/LessonPage';
-import QuizPage from './pages/QuizPage';
-import TeacherTestPage from './pages/TeacherTestPage';
-import CertificatePage from './pages/CertificatePage';
+// Lazy load pages for better performance
+const HomePage = lazy(() => import('./pages/HomePage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const StudentDashboard = lazy(() => import('./pages/Student/Dashboard'));
+const BrowseCourses = lazy(() => import('./pages/Student/BrowseCourses'));
+const LeaderboardPage = lazy(() => import('./pages/Student/LeaderboardPage'));
+const FriendsPage = lazy(() => import('./pages/Student/FriendsPage'));
+const TeacherDashboard = lazy(() => import('./pages/Teacher/Dashboard'));
+const RecordingPage = lazy(() => import('./pages/Teacher/RecordingPage'));
+const CoursePage = lazy(() => import('./pages/CoursePage'));
+const LessonPage = lazy(() => import('./pages/LessonPage'));
+const QuizPage = lazy(() => import('./pages/QuizPage'));
+const TeacherTestPage = lazy(() => import('./pages/TeacherTestPage'));
+const CertificatePage = lazy(() => import('./pages/CertificatePage'));
+
+// Loading component
+const LoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary mx-auto mb-4"></div>
+      <p className="text-gray-600 font-semibold">Loading...</p>
+    </div>
+  </div>
+);
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
       retry: 1,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
     },
   },
 });
@@ -35,10 +50,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <div className={`min-h-screen ${isSadMode ? 'sad-mode-bg' : 'bg-gradient-to-br from-blue-50 via-white to-green-50'}`}>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<HomePage />} />
+        <div className={`min-h-screen w-full ${isSadMode ? 'sad-mode-bg' : 'bg-gradient-to-br from-blue-50 via-white to-green-50'}`}>
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<HomePage />} />
             <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to={user?.role === 'STUDENT' ? '/student/dashboard' : '/teacher/dashboard'} replace />} />
             <Route path="/register" element={!isAuthenticated ? <RegisterPage /> : <Navigate to={user?.role === 'STUDENT' ? '/student/dashboard' : '/teacher/dashboard'} replace />} />
             
@@ -102,6 +118,20 @@ function App() {
               }
             />
             <Route
+              path="/teacher/record"
+              element={
+                isAuthenticated ? (
+                  user?.role === 'TEACHER' ? (
+                    <RecordingPage />
+                  ) : (
+                    <Navigate to="/student/dashboard" replace />
+                  )
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route
               path="/teacher/qualification-test"
               element={<TeacherTestPage />}
             />
@@ -109,6 +139,7 @@ function App() {
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
+          </Suspense>
           
           <Toaster
             position="top-right"

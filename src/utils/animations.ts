@@ -1,174 +1,182 @@
-import { animate, stagger, Timeline } from 'animejs';
-
-// Create safe anime wrapper with proper typing
-const createAnime = (params: any) => {
-  try {
-    return animate(params);
-  } catch (error) {
-    console.warn('Animation failed:', error);
-    return null;
-  }
-};
-
-const anime: any = createAnime;
-anime.stagger = stagger;
-anime.timeline = () => new Timeline();
-anime.random = (min: number, max: number) => Math.random() * (max - min) + min;
+// Simplified animations without animejs dependency issues
+// Using CSS transitions and basic JavaScript animations
 
 /**
  * Fade in animation
  */
-export const fadeIn = (targets: string | HTMLElement, delay: number = 0) => {
-  try {
-    return animate({
-      targets,
-      opacity: [0, 1],
-      translateY: [20, 0],
-      duration: 800,
-      delay,
-      easing: 'easeOutCubic',
+export const fadeIn = (target: HTMLElement | null, delay: number = 0) => {
+  if (!target) return null;
+  
+  setTimeout(() => {
+    target.style.opacity = '0';
+    target.style.transform = 'translateY(20px)';
+    target.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+    
+    requestAnimationFrame(() => {
+      target.style.opacity = '1';
+      target.style.transform = 'translateY(0)';
     });
-  } catch (error) {
-    console.warn('fadeIn animation failed:', error);
-    return null;
-  }
+  }, delay);
+  
+  return null;
 };
 
 /**
  * Slide in from left
  */
-export const slideInLeft = (targets: string | HTMLElement, delay: number = 0) => {
-  try {
-    return animate({
-      targets,
-      translateX: [-100, 0],
-      opacity: [0, 1],
-      duration: 600,
-      delay,
-      easing: 'easeOutExpo',
+export const slideInLeft = (target: HTMLElement | null, delay: number = 0) => {
+  if (!target) return null;
+  
+  setTimeout(() => {
+    target.style.opacity = '0';
+    target.style.transform = 'translateX(-100px)';
+    target.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+    
+    requestAnimationFrame(() => {
+      target.style.opacity = '1';
+      target.style.transform = 'translateX(0)';
     });
-  } catch (error) {
-    console.warn('slideInLeft animation failed:', error);
-    return null;
-  }
+  }, delay);
+  
+  return null;
 };
 
 /**
  * Slide in from right
  */
-export const slideInRight = (targets: string | HTMLElement, delay: number = 0) => {
-  try {
-    return animate({
-      targets,
-      translateX: [100, 0],
-      opacity: [0, 1],
-      duration: 600,
-      delay,
-      easing: 'easeOutExpo',
+export const slideInRight = (target: HTMLElement | null, delay: number = 0) => {
+  if (!target) return null;
+  
+  setTimeout(() => {
+    target.style.opacity = '0';
+    target.style.transform = 'translateX(100px)';
+    target.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+    
+    requestAnimationFrame(() => {
+      target.style.opacity = '1';
+      target.style.transform = 'translateX(0)';
     });
-  } catch (error) {
-    console.warn('slideInRight animation failed:', error);
-    return null;
-  }
+  }, delay);
+  
+  return null;
 };
 
 /**
  * Scale up animation
  */
-export const scaleUp = (targets: string | HTMLElement, delay: number = 0) => {
-  return anime({
-    targets,
-    scale: [0.8, 1],
-    opacity: [0, 1],
-    duration: 500,
-    delay,
-    easing: 'easeOutBack',
-  });
+export const scaleUp = (target: HTMLElement | string | null, delay: number = 0) => {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element || !(element instanceof HTMLElement)) return null;
+  
+  setTimeout(() => {
+    element.style.opacity = '0';
+    element.style.transform = 'scale(0.8)';
+    element.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+    
+    requestAnimationFrame(() => {
+      element.style.opacity = '1';
+      element.style.transform = 'scale(1)';
+    });
+  }, delay);
+  
+  return null;
 };
 
 /**
  * Bounce animation
  */
-export const bounce = (targets: string | HTMLElement) => {
-  return anime({
-    targets,
-    translateY: [
-      { value: -10, duration: 200 },
-      { value: 0, duration: 200 },
-      { value: -5, duration: 150 },
-      { value: 0, duration: 150 },
-    ],
-    easing: 'easeOutQuad',
-  });
+export const bounce = (target: HTMLElement | string | null) => {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element || !(element instanceof HTMLElement)) return null;
+  
+  element.style.animation = 'bounce 0.7s ease';
+  setTimeout(() => {
+    element.style.animation = '';
+  }, 700);
+  
+  return null;
 };
 
 /**
  * Pulse animation (for notifications, live indicators)
  */
-export const pulse = (targets: string | HTMLElement) => {
-  return anime({
-    targets,
-    scale: [1, 1.1, 1],
-    duration: 1000,
-    loop: true,
-    easing: 'easeInOutQuad',
-  });
+export const pulse = (target: HTMLElement | string | null) => {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element || !(element instanceof HTMLElement)) return null;
+  
+  element.style.animation = 'pulse 1s infinite';
+  return null;
 };
 
 /**
  * Rotate animation (for loading, icons)
  */
-export const rotate = (targets: string | HTMLElement) => {
-  return anime({
-    targets,
-    rotate: '1turn',
-    duration: 2000,
-    loop: true,
-    easing: 'linear',
-  });
+export const rotate = (target: HTMLElement | string | null) => {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element || !(element instanceof HTMLElement)) return null;
+  
+  element.style.animation = 'spin 2s linear infinite';
+  return null;
 };
 
 /**
  * Stagger fade in for lists
  */
-export const staggerFadeIn = (targets: string | HTMLElement | NodeListOf<Element> | Element[]) => {
-  try {
-    return animate({
-      targets,
-      opacity: [0, 1],
-      translateY: [20, 0],
-      delay: stagger(100), // 100ms delay between each item
-      duration: 600,
-      easing: 'easeOutCubic',
-    });
-  } catch (error) {
-    console.warn('staggerFadeIn animation failed:', error);
-    return null;
+export const staggerFadeIn = (targets: HTMLElement | NodeListOf<Element> | Element[] | string | null) => {
+  let elements: Element[] = [];
+  
+  if (!targets) return null;
+  
+  if (typeof targets === 'string') {
+    elements = Array.from(document.querySelectorAll(targets));
+  } else if (targets instanceof HTMLElement) {
+    elements = [targets];
+  } else if (targets instanceof NodeList) {
+    elements = Array.from(targets);
+  } else if (Array.isArray(targets)) {
+    elements = targets;
   }
+  
+  elements.forEach((element, index) => {
+    if (element instanceof HTMLElement) {
+      setTimeout(() => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+        
+        requestAnimationFrame(() => {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        });
+      }, index * 100);
+    }
+  });
+  
+  return null;
 };
 
 /**
  * Card flip animation
  */
-export const flipCard = (targets: string | HTMLElement) => {
-  return anime({
-    targets,
-    rotateY: [0, 180],
-    duration: 600,
-    easing: 'easeInOutQuad',
-  });
+export const flipCard = (target: HTMLElement | string | null) => {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element || !(element instanceof HTMLElement)) return null;
+  
+  element.style.transition = 'transform 0.6s';
+  element.style.transform = 'rotateY(180deg)';
+  
+  return null;
 };
 
 /**
  * Success checkmark animation
  */
-export const drawCheckmark = (targets: string | HTMLElement) => {
-  return anime({
-    targets,
-    strokeDashoffset: [100, 0],
-    duration: 800,
-    easing: 'easeInOutQuad',
-  });
+export const drawCheckmark = (target: HTMLElement | string | null) => {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element || !(element instanceof HTMLElement)) return null;
+  
+  element.style.animation = 'drawCheck 0.8s ease-out';
+  return null;
 };
 
 /**
@@ -179,101 +187,97 @@ export const animateNumber = (
   finalValue: number,
   duration: number = 1000
 ) => {
-  const obj = { value: 0 };
-  return anime({
-    targets: obj,
-    value: finalValue,
-    duration,
-    round: 1,
-    easing: 'easeOutExpo',
-    update: () => {
-      element.textContent = obj.value.toString();
-    },
-  });
+  if (!element) return null;
+  
+  const startValue = 0;
+  const startTime = performance.now();
+  
+  const animate = (currentTime: number) => {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const currentValue = Math.floor(startValue + (finalValue - startValue) * progress);
+    
+    element.textContent = currentValue.toString();
+    
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  };
+  
+  requestAnimationFrame(animate);
+  return null;
 };
 
 /**
  * Shake animation (for errors)
  */
-export const shake = (targets: string | HTMLElement) => {
-  return anime({
-    targets,
-    translateX: [
-      { value: -10, duration: 100 },
-      { value: 10, duration: 100 },
-      { value: -10, duration: 100 },
-      { value: 10, duration: 100 },
-      { value: 0, duration: 100 },
-    ],
-    easing: 'easeInOutSine',
-  });
+export const shake = (target: HTMLElement | string | null) => {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element || !(element instanceof HTMLElement)) return null;
+  
+  element.style.animation = 'shake 0.5s';
+  setTimeout(() => {
+    element.style.animation = '';
+  }, 500);
+  
+  return null;
 };
 
 /**
  * Floating animation (for hero elements)
  */
-export const float = (targets: string | HTMLElement) => {
-  try {
-    return animate({
-      targets,
-      translateY: [-10, 10],
-      duration: 2000,
-      direction: 'alternate',
-      loop: true,
-      easing: 'easeInOutSine',
-    });
-  } catch (error) {
-    console.warn('float animation failed:', error);
-    return null;
-  }
+export const float = (target: HTMLElement | null) => {
+  if (!target) return null;
+  
+  target.style.animation = 'float 2s ease-in-out infinite';
+  return null;
 };
 
 /**
  * Ripple effect
  */
-export const ripple = (targets: string | HTMLElement) => {
-  return anime({
-    targets,
-    scale: [0, 2],
-    opacity: [0.8, 0],
-    duration: 600,
-    easing: 'easeOutQuad',
-  });
+export const ripple = (target: HTMLElement | string | null) => {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element || !(element instanceof HTMLElement)) return null;
+  
+  element.style.animation = 'ripple 0.6s ease-out';
+  setTimeout(() => {
+    element.style.animation = '';
+  }, 600);
+  
+  return null;
 };
 
 /**
  * Progress bar fill animation
  */
-export const fillProgressBar = (targets: string | HTMLElement, percentage: number) => {
-  return anime({
-    targets,
-    width: `${percentage}%`,
-    duration: 1500,
-    easing: 'easeInOutQuad',
-  });
+export const fillProgressBar = (target: HTMLElement | string | null, percentage: number) => {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element || !(element instanceof HTMLElement)) return null;
+  
+  element.style.transition = 'width 1.5s ease-in-out';
+  element.style.width = `${percentage}%`;
+  
+  return null;
 };
 
 /**
  * Glowing animation (for streak fire, achievements)
  */
-export const glow = (targets: string | HTMLElement) => {
-  return anime({
-    targets,
-    boxShadow: [
-      '0 0 5px rgba(255, 165, 0, 0.5)',
-      '0 0 20px rgba(255, 165, 0, 0.8)',
-      '0 0 5px rgba(255, 165, 0, 0.5)',
-    ],
-    duration: 1500,
-    loop: true,
-    easing: 'easeInOutQuad',
-  });
+export const glow = (target: HTMLElement | string | null) => {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element || !(element instanceof HTMLElement)) return null;
+  
+  element.style.animation = 'glow 1.5s ease-in-out infinite';
+  return null;
 };
 
 /**
  * Confetti explosion effect
  */
 export const confettiExplosion = (container: HTMLElement) => {
+  if (!container) return;
+  
   const colors = ['#58CC02', '#1CB0F6', '#FFC800', '#FF4B4B', '#CE82FF'];
   const confettiCount = 50;
 
@@ -286,32 +290,41 @@ export const confettiExplosion = (container: HTMLElement) => {
     confetti.style.left = '50%';
     confetti.style.top = '50%';
     confetti.style.borderRadius = '50%';
+    confetti.style.pointerEvents = 'none';
     container.appendChild(confetti);
 
-    anime({
-      targets: confetti,
-      translateX: anime.random(-200, 200),
-      translateY: anime.random(-200, 200),
-      scale: [1, 0],
-      opacity: [1, 0],
-      duration: anime.random(1000, 1500),
-      easing: 'easeOutExpo',
-      complete: () => confetti.remove(),
+    const angle = Math.random() * Math.PI * 2;
+    const velocity = 200 + Math.random() * 200;
+    const x = Math.cos(angle) * velocity;
+    const y = Math.sin(angle) * velocity;
+
+    confetti.style.transition = 'all 1.5s ease-out';
+    requestAnimationFrame(() => {
+      confetti.style.transform = `translate(${x}px, ${y}px) scale(0)`;
+      confetti.style.opacity = '0';
     });
+
+    setTimeout(() => confetti.remove(), 1500);
   }
 };
 
 /**
  * Page transition animation
  */
-export const pageTransition = (targets: string | HTMLElement) => {
-  return anime.timeline().add({
-    targets,
-    opacity: [0, 1],
-    translateY: [50, 0],
-    duration: 600,
-    easing: 'easeOutExpo',
+export const pageTransition = (target: HTMLElement | string | null) => {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element || !(element instanceof HTMLElement)) return null;
+  
+  element.style.opacity = '0';
+  element.style.transform = 'translateY(50px)';
+  element.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+  
+  requestAnimationFrame(() => {
+    element.style.opacity = '1';
+    element.style.transform = 'translateY(0)';
   });
+  
+  return null;
 };
 
 /**
@@ -333,15 +346,18 @@ export const buttonRipple = (event: React.MouseEvent<HTMLButtonElement>) => {
   ripple.style.borderRadius = '50%';
   ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
   ripple.style.pointerEvents = 'none';
+  ripple.style.transform = 'scale(0)';
+  ripple.style.transition = 'transform 0.6s ease-out, opacity 0.6s ease-out';
+  ripple.style.opacity = '1';
   
+  button.style.position = 'relative';
+  button.style.overflow = 'hidden';
   button.appendChild(ripple);
 
-  anime({
-    targets: ripple,
-    scale: [0, 4],
-    opacity: [1, 0],
-    duration: 600,
-    easing: 'easeOutExpo',
-    complete: () => ripple.remove(),
+  requestAnimationFrame(() => {
+    ripple.style.transform = 'scale(4)';
+    ripple.style.opacity = '0';
   });
+
+  setTimeout(() => ripple.remove(), 600);
 };
