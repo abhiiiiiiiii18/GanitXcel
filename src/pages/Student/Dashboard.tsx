@@ -20,7 +20,7 @@ const StudentDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { user, logout, updateUser } = useAuthStore();
   const { currentStreak, lastActiveDate, checkAndUpdateStreak } = useStreakStore();
-  const { isSadMode, setSadMode } = useUIStore();
+  const { setSadMode } = useUIStore();
 
   // State for modals/panels
   const [showNotifications, setShowNotifications] = useState(false);

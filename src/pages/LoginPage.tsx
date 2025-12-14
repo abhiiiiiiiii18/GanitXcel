@@ -25,20 +25,30 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    console.log('Login clicked with role:', role); // Debug log
+    console.log('🔐 Login attempt started');
+    console.log('   • Email:', email);
+    console.log('   • Role:', role);
 
     try {
       // Login with Firebase
       const { user: firebaseUser, profile } = await loginUser(email, password);
 
+      console.log('✅ Firebase login successful');
+      console.log('   • User ID:', firebaseUser.uid);
+      console.log('   • Profile Role:', profile.role);
+      console.log('   • Selected Role:', role);
+
       // Verify role matches
       if (profile.role !== role) {
+        console.error('❌ Role mismatch!');
+        console.error('   • Expected:', role);
+        console.error('   • Got:', profile.role);
         toast.error(`This account is registered as a ${profile.role.toLowerCase()}, not a ${role.toLowerCase()}.`);
         setIsLoading(false);
         return;
       }
 
-      console.log('Login successful with profile:', profile); // Debug log
+      console.log('✅ Role verification passed');
 
       // Create user object for store
       const mockUser = {
@@ -50,18 +60,19 @@ const LoginPage: React.FC = () => {
       };
 
       login(mockUser);
+      console.log('✅ User logged into Zustand store');
       toast.success(`Welcome back as ${role === 'STUDENT' ? 'Student' : 'Teacher'}! 🎉`);
       
       // Use replace to prevent back button issues
       if (role === 'STUDENT') {
-        console.log('Navigating to student dashboard');
+        console.log('➡️  Navigating to /student/dashboard');
         navigate('/student/dashboard', { replace: true });
       } else {
-        console.log('Navigating to teacher dashboard');
+        console.log('➡️  Navigating to /teacher/dashboard');
         navigate('/teacher/dashboard', { replace: true });
       }
     } catch (error: any) {
-      console.error('Login error:', error);
+      console.error('❌ Login error:', error);
       toast.error(error.message || 'Login failed. Please try again.');
     } finally {
       setIsLoading(false);
@@ -172,9 +183,9 @@ const LoginPage: React.FC = () => {
                 <input type="checkbox" className="rounded" />
                 <span className="text-gray-600">Remember me</span>
               </label>
-              <a href="#" className="text-primary font-semibold hover:underline">
+              <button type="button" onClick={() => toast('Password reset coming soon!')} className="text-primary font-semibold hover:underline">
                 Forgot password?
-              </a>
+              </button>
             </div>
 
             <Button

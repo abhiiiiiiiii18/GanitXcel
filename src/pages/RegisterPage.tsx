@@ -50,6 +50,10 @@ const RegisterPage: React.FC = () => {
     }
 
     setIsLoading(true);
+    console.log('📝 Registration attempt started');
+    console.log('   • Email:', formData.email);
+    console.log('   • Name:', formData.name);
+    console.log('   • Role:', role);
 
     try {
       // Register with Firebase
@@ -59,6 +63,10 @@ const RegisterPage: React.FC = () => {
         formData.name,
         role
       );
+
+      console.log('✅ Registration successful');
+      console.log('   • User ID:', firebaseUser.uid);
+      console.log('   • Profile created');
 
       const mockUser = {
         id: firebaseUser.uid,
@@ -71,10 +79,12 @@ const RegisterPage: React.FC = () => {
       };
 
       login(mockUser);
+      console.log('✅ User logged into Zustand store');
       toast.success('Account created successfully! 🎉');
+      console.log('➡️  Navigating to /student/dashboard');
       navigate('/student/dashboard', { replace: true });
     } catch (error: any) {
-      console.error('Registration error:', error);
+      console.error('❌ Registration error:', error);
       toast.error(error.message || 'Registration failed. Please try again.');
     } finally {
       setIsLoading(false);

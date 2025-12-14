@@ -1,8 +1,9 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { useAuthStore, useUIStore } from './store';
+import { initializeAuthObserver } from './services/authObserver';
 
 // Lazy load pages for better performance
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -46,6 +47,12 @@ const queryClient = new QueryClient({
 function App() {
   const { isAuthenticated, user } = useAuthStore();
   const { isSadMode } = useUIStore();
+
+  // Initialize Firebase auth state observer on app mount
+  useEffect(() => {
+    console.log('🚀 App mounted - initializing auth observer');
+    initializeAuthObserver();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

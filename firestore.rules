@@ -1,0 +1,131 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user owns the document
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Users collection - SECURE access control
+    match /users/{userId} {
+      // Allow authenticated users to read any user profile (for leaderboard, friends)
+      allow read: if isSignedIn();
+      
+      // Allow NEW user to create their own profile during registration
+      // This is critical for Firebase Auth registration to work
+      allow create: if isSignedIn() && isOwner(userId) &&
+                      request.resource.data.id == userId &&
+                      request.resource.data.email == request.auth.token.email;
+      
+      // Allow user to update ONLY their own profile
+      allow update: if isOwner(userId) &&
+                      request.resource.data.id == userId &&
+                      request.resource.data.email == resource.data.email; // Email can't be changed
+      
+      // Don't allow deletion (can be handled by Cloud Functions)
+      allow delete: if false;
+    }
+    
+    // Helper function to check if user is a teacher
+    function isTeacher() {
+      return isSignedIn() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'TEACHER' &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isQualified == true;
+    }
+    
+    // Helper function to check if user is a student
+    function isStudent() {
+      return isSignedIn() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'STUDENT';
+    }
+    
+    // Courses collection - SECURE access control
+    match /courses/{courseId} {
+      // All authenticated users can read courses
+      allow read: if isSignedIn();
+      
+      // Only QUALIFIED teachers can create/update/delete courses
+      allow create: if isTeacher();
+      allow update, delete: if isTeacher() && resource.data.teacherId == request.auth.uid;
+    }
+    
+    // Lessons collection - SECURE access control
+    match /courses/{courseId}/lessons/{lessonId} {
+      // All authenticated users can read lessons
+      allow read: if isSignedIn();
+      
+      // Only course owner (teacher) can modify lessons
+      allow write: if isTeacher() && 
+                     get(/databases/$(database)/documents/courses/$(courseId)).data.teacherId == request.auth.uid;
+    }
+    
+    // Quizzes collection - SECURE access control
+    match /quizzes/{quizId} {
+      // All authenticated users can read quizzes
+      allow read: if isSignedIn();
+      
+      // Only qualified teachers can create quizzes
+      allow create: if isTeacher();
+      allow update, delete: if isTeacher() && resource.data.createdBy == request.auth.uid;
+    }
+    
+    // Student progress - SECURE: only owner can access
+    match /progress/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    // Quiz attempts - SECURE: students can create, read their own
+    match /quizAttempts/{attemptId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if false; // No updates to quiz attempts (prevent cheating)
+      allow delete: if false;
+    }
+    
+    // Enrollments - SECURE access control
+    match /enrollments/{enrollmentId} {
+      allow read: if isSignedIn();
+      // Only students can enroll themselves
+      allow create: if isStudent() && request.resource.data.userId == request.auth.uid;
+      allow update: if isOwner(resource.data.userId);
+      allow delete: if isOwner(resource.data.userId);
+    }
+    
+    // Certificates - SECURE: users can only read/create their own
+    match /certificates/{certificateId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false; // Certificates are immutable
+    }
+    
+    // Friends - SECURE: users can manage their own friendships
+    match /friends/{friendshipId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && 
+                     (resource.data.userId == request.auth.uid || 
+                      resource.data.friendId == request.auth.uid);
+      allow update: if false;
+    }
+    
+    // Leaderboard - SECURE: read-only for all, managed by backend
+    match /leaderboard/{entry} {
+      allow read: if isSignedIn();
+      allow write: if false; // Only Cloud Functions/Admin SDK can write
+    }
+    
+    // Notifications - SECURE: users can read/update their own
+    match /notifications/{notificationId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if false; // Only backend creates notifications
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid; // For marking as read
+      allow delete: if isOwner(resource.data.userId);
+    }
+  }
+}

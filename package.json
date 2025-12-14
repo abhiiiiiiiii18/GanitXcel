@@ -24,7 +24,7 @@
     "axios": "^1.13.1",
     "date-fns": "^4.1.0",
     "firebase": "^12.5.0",
-    "framer-motion": "^12.23.24",
+    "framer-motion": "^12.23.26",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.3",
     "katex": "^0.16.25",

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { User, Student, Teacher, UserRole, UIState } from '../types';
+import { User, Student, Teacher, UIState } from '../types';
 
 interface AuthState {
   user: User | Student | Teacher | null;

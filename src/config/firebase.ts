@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
@@ -14,6 +14,16 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
+// Validate Firebase configuration
+if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+  console.error('❌ Firebase configuration is incomplete. Please check your .env file.');
+  console.error('Required variables:', {
+    apiKey: firebaseConfig.apiKey ? '✓' : '✗',
+    authDomain: firebaseConfig.authDomain ? '✓' : '✗',
+    projectId: firebaseConfig.projectId ? '✓' : '✗',
+  });
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
@@ -21,5 +31,14 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+// Set auth persistence to LOCAL (persists even after browser is closed)
+setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log('✅ Firebase auth persistence enabled (LOCAL)');
+  })
+  .catch((error) => {
+    console.error('❌ Failed to set auth persistence:', error);
+  });
 
 export default app;

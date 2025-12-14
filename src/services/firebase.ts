@@ -1,5 +1,5 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
-import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, onSnapshot, Timestamp } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 
 // Import the already initialized Firebase services from config
 import { auth, db } from '../config/firebase';
@@ -16,9 +16,13 @@ export const registerUser = async (
   role: 'STUDENT' | 'TEACHER'
 ) => {
   try {
+    console.log('📝 Registering new user:', { email, name, role });
+    
     // Create auth user
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+
+    console.log('✅ Firebase auth user created, UID:', user.uid);
 
     // Create user profile in Firestore
     const userProfile = {
@@ -33,13 +37,28 @@ export const registerUser = async (
       level: 1,
       streak: 0,
       badges: [],
+      enrolledCourses: [],
     };
 
     await setDoc(doc(db, 'users', user.uid), userProfile);
+    console.log('✅ User profile created in Firestore');
 
     return { user, profile: userProfile };
   } catch (error: any) {
-    throw new Error(error.message || 'Registration failed');
+    console.error('❌ Registration error:', error);
+    
+    // Provide user-friendly error messages
+    if (error.code === 'auth/email-already-in-use') {
+      throw new Error('An account with this email already exists. Please login instead.');
+    } else if (error.code === 'auth/weak-password') {
+      throw new Error('Password is too weak. Please use at least 6 characters.');
+    } else if (error.code === 'auth/invalid-email') {
+      throw new Error('Invalid email address format.');
+    } else if (error.code === 'auth/network-request-failed') {
+      throw new Error('Network error. Please check your internet connection.');
+    }
+    
+    throw new Error(error.message || 'Registration failed. Please try again.');
   }
 };
 
@@ -49,27 +68,55 @@ export const registerUser = async (
  */
 export const loginUser = async (email: string, password: string) => {
   try {
+    console.log('🔐 Attempting login for:', email);
+    
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+
+    console.log('✅ Firebase auth successful, UID:', user.uid);
 
     // Fetch user profile from Firestore
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     
     if (!userDoc.exists()) {
-      throw new Error('User profile not found');
+      console.error('❌ User profile not found in Firestore for UID:', user.uid);
+      throw new Error('User profile not found. Please contact support.');
     }
 
     const userProfile = userDoc.data();
+    console.log('📋 User profile loaded:', {
+      name: userProfile.name,
+      email: userProfile.email,
+      role: userProfile.role,
+      isQualified: userProfile.isQualified
+    });
 
     // If teacher, check if qualified
     if (userProfile.role === 'TEACHER' && !userProfile.isQualified) {
       await signOut(auth); // Log them out immediately
+      console.warn('⚠️ Teacher not qualified yet');
       throw new Error('Teacher not qualified. Please complete the qualification test first.');
     }
 
+    console.log('✅ Login successful for', userProfile.role);
     return { user, profile: userProfile };
   } catch (error: any) {
-    throw new Error(error.message || 'Login failed');
+    console.error('❌ Login error:', error);
+    
+    // Provide user-friendly error messages
+    if (error.code === 'auth/user-not-found') {
+      throw new Error('No account found with this email. Please register first.');
+    } else if (error.code === 'auth/wrong-password') {
+      throw new Error('Incorrect password. Please try again.');
+    } else if (error.code === 'auth/invalid-email') {
+      throw new Error('Invalid email address format.');
+    } else if (error.code === 'auth/network-request-failed') {
+      throw new Error('Network error. Please check your internet connection.');
+    } else if (error.code === 'auth/too-many-requests') {
+      throw new Error('Too many failed attempts. Please try again later.');
+    }
+    
+    throw new Error(error.message || 'Login failed. Please try again.');
   }
 };
 

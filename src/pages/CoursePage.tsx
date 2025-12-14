@@ -5,7 +5,6 @@ import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { getCourseProgress } from '../services/firebase';
 import { Button } from '../components/Button';
-import { ProgressBar } from '../components/ProgressBar';
 import { useAuthStore } from '../store';
 import { formatCurrency, formatDuration, getRatingStars } from '../utils/helpers';
 import toast from 'react-hot-toast';
