@@ -1,4 +1,4 @@
-# í³ GanitXcel - Mathematics Learning Platform
+# ï¿½ï¿½ï¿½ GanitXcel - Mathematics Learning Platform
 
 **A Personal Project: Duolingo-inspired Mathematics LMS for Indian Students (Grades 8-12)**
 
@@ -6,7 +6,7 @@
 
 ---
 
-## í±¨â€í²» About This Project
+## ï¿½ï¿½ï¿½â€ï¿½ï¿½ï¿½ About This Project
 
 GanitXcel is my personal learning management system that combines the best of gamification (inspired by Duolingo) with quality mathematics education. The platform helps students learn through:
 
@@ -16,9 +16,9 @@ GanitXcel is my personal learning management system that combines the best of ga
 - Live classes with qualified teachers
 - Comprehensive quizzes and assessments
 
-## í¾¯ Key Features
+## ï¿½ï¿½ï¿½ Key Features
 
-### For Students í¾“
+### For Students ï¿½ï¿½ï¿½
 - **Gamified Learning**: Earn points, maintain streaks, collect badges
 - **AI Tutor**: 24/7 doubt bot powered by Gemini AI
 - **Video Lessons**: Curated YouTube content organized by curriculum
@@ -27,14 +27,14 @@ GanitXcel is my personal learning management system that combines the best of ga
 - **Community**: Discord channels for peer learning
 - **Progress Tracking**: Visual analytics and achievement system
 
-### For Teachers í±©â€í¿«
+### For Teachers ï¿½ï¿½ï¿½â€ï¿½ï¿½ï¿½
 - **Course Creation**: Build courses using YouTube playlists
 - **Quiz Management**: Create and manage assessments
 - **Qualification System**: Verified teaching credentials
 - **Analytics Dashboard**: Track student performance
 - **Earnings Portal**: Manage course revenue (70% share)
 
-## í» ï¸ Tech Stack
+## ï¿½ï¿½ï¿½ï¸ Tech Stack
 
 **Frontend**: React 18 + TypeScript + Tailwind CSS + Framer Motion  
 **Backend**: Firebase (Auth, Firestore, Storage)  
@@ -81,7 +81,7 @@ npm start
 
 Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-## í°³ Docker Support
+## ï¿½ï¿½ï¿½ Docker Support
 
 Build and run with Docker Compose:
 
@@ -95,7 +95,7 @@ docker-compose up -d
 # Access the app at http://localhost:3000
 \`\`\`
 
-## í³ Project Structure
+## ï¿½ï¿½ï¿½ Project Structure
 
 \`\`\`
 â”œâ”€â”€ src/
@@ -114,7 +114,7 @@ docker-compose up -d
 â””â”€â”€ public/             # Static assets
 \`\`\`
 
-## í¾¨ Design Philosophy
+## ï¿½ï¿½ï¿½ Design Philosophy
 
 **Duolingo-Inspired UI:**
 - Primary colors: Green (#58CC02), Blue (#1CB0F6), Yellow (#FFC800)
@@ -129,18 +129,18 @@ docker-compose up -d
 - **Student Rewards**: Top rankers receive â‚¹500-â‚¹1000 scholarships
 - **Freemium Model**: Basic content free, premium courses paid
 
-## í´’ Security Features
+## ï¿½ï¿½ï¿½ Security Features
 
 - Firebase Authentication
 - Tab-switching detection for academic integrity
 - Teacher qualification verification
 - Secure payment integration (Razorpay)
 
-## í³ License
+## ï¿½ï¿½ï¿½ License
 
 This is a personal project. All rights reserved.
 
-## í±¤ Author
+## ï¿½ï¿½ï¿½ Author
 
 **Abhi**  
 GitHub: [@abhiiiiiiiii18](https://github.com/abhiiiiiiiii18)
@@ -149,4 +149,4 @@ GitHub: [@abhiiiiiiiii18](https://github.com/abhiiiiiiiii18)
 
 **Note**: This project was built as a personal learning experience and portfolio piece. Feel free to explore the code and learn from it!
 
-í²¡ *Made with passion for mathematics education* â¤ï¸
+ï¿½ï¿½ï¿½ *Made with passion for mathematics education* â¤ï¸
